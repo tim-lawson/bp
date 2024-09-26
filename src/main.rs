@@ -73,13 +73,9 @@ fn main() {
 
     let script = format!(
         "#!/bin/sh
-
+#SBATCH --job-name={job_name}
+#SBATCH --output={output}
 cd $SLURM_SUBMIT_DIR
-echo $SLURM_SUBMIT_DIR
-
-#SBATCH --job-name={job_name} \
---output={output}
-
 {command}",
     );
 
