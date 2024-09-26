@@ -1,10 +1,8 @@
 use config::Config;
 use inquire::{CustomType, MultiSelect, Text};
-use std::{env, process::Command};
+use std::process::Command;
 pub mod config;
 pub mod gpu_type;
-
-const SLURM_SUBMIT_DIR: &str = "SLURM_SUBMIT_DIR";
 
 fn main() {
     let config = config::Config::read();
@@ -73,16 +71,10 @@ fn main() {
         .collect::<Vec<String>>()
         .join(",");
 
-    match env::var(SLURM_SUBMIT_DIR) {
-        Ok(v) => println!("{}: {}", SLURM_SUBMIT_DIR, v),
-        Err(e) => panic!("${} is not set ({})", SLURM_SUBMIT_DIR, e),
-    }
-
     let script = format!(
         "#!/bin/sh
 #SBATCH --job-name={job_name}
 #SBATCH --output={output}
-cd {SLURM_SUBMIT_DIR}
 {command}",
     );
 
