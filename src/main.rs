@@ -75,6 +75,7 @@ fn main() {
         "#!/bin/sh
 #SBATCH --job-name={job_name}
 #SBATCH --output={output}
+
 {command}",
     );
 
