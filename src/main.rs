@@ -31,9 +31,10 @@ fn main() {
         .prompt()
         .expect("failed to get GPUs");
 
-    let gpu_types = MultiSelect::new("GPU types:", gpu_type::GPU_TYPES.to_vec())
+    let mut gpu_types = MultiSelect::new("GPU types:", gpu_type::GPU_TYPES.to_vec())
         .prompt()
         .expect("failed to get GPU types");
+    gpu_types.sort();
 
     let hours = CustomType::new("Hours:")
         .with_default(12)
@@ -65,32 +66,40 @@ fn main() {
         .min()
         .expect("failed to get memory");
 
-    let gpus = gpu_types
-        .into_iter()
-        .map(|gpu_type| format!("{}:{}", gpu_type.name(), gpus))
-        .collect::<Vec<String>>()
-        .join(",");
+    let gpus = match gpu_types.len() {
+        1 => format!("{}:{}", gpu_types[0].name(), gpus),
+        _ => format!(
+            "{{{}}}",
+            gpu_types
+                .into_iter()
+                .map(|gpu_type| format!("{}:{}", gpu_type.name(), gpus))
+                .collect::<Vec<String>>()
+                .join(",")
+        ),
+    };
 
     let script = format!(
         "#!/bin/sh
 #SBATCH --job-name={job_name}
 #SBATCH --output={output}
 
-{command}",
+{command}
+
+exit 0",
     );
 
-    let cmd = format!(
-        " --time={days}-{hours}:00:00 \
---cpus-per-task={cpus_per_task} \
---mem={memory}G \
---account={account} \
---partition={queue} \
---gpus={{{gpus}}} ",
-    );
-
-    Command::new("sh")
+    Command::new("bash")
         .arg("-c")
-        .arg(format!("{script} | sbatch {cmd}"))
-        .spawn()
+        .arg(format!(
+            "sbatch --time={days}-{hours}:00:00 \
+             --cpus-per-task={cpus_per_task} \
+             --mem={memory}G \
+             --account={account} \
+             --partition={queue} \
+             --gpus={gpus} \
+             <(echo '{}')",
+            script.replace("'", "'\\''")
+        ))
+        .output()
         .expect("failed to submit job");
 }
