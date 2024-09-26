@@ -80,7 +80,7 @@ fn main() {
     );
 
     let cmd = format!(
-        "--time={days}-{hours}:00:00 \
+        " --time={days}-{hours}:00:00 \
 --cpus-per-task={cpus_per_task} \
 --mem={memory}G \
 --account={account} \
