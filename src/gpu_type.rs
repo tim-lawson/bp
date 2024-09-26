@@ -1,7 +1,9 @@
 use core::fmt;
 use std::cmp::Ordering;
 
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum GpuType {
     RTX2080,
     RTX3090,

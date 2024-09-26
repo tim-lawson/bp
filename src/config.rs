@@ -2,17 +2,34 @@ use homedir::my_home;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 
+use crate::gpu_type::GpuType;
+
 const CONFIG: &str = ".bp.json";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub account: String,
-    pub queue: String,
+    pub project: Option<String>,
+    pub queue: Option<String>,
+    pub gpus: Option<u8>,
+    pub gpu_types: Option<Vec<GpuType>>,
+    pub hours: Option<u8>,
 }
 
 impl Config {
-    pub fn new(account: String, queue: String) -> Self {
-        Self { account, queue }
+    pub fn new(
+        project: Option<String>,
+        queue: Option<String>,
+        gpus: Option<u8>,
+        gpu_types: Option<Vec<GpuType>>,
+        hours: Option<u8>,
+    ) -> Self {
+        Self {
+            project,
+            queue,
+            gpus,
+            gpu_types,
+            hours,
+        }
     }
 
     pub fn read() -> Option<Self> {

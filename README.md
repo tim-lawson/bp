@@ -44,4 +44,4 @@ bp
 - [ ] Support other command-line arguments
 - [ ] Support interactive and array jobs
 - [ ] Make job names optional
-- [ ] Save other default values to `.bp.json`
+- [x] Save other default values to `.bp.json`
