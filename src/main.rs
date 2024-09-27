@@ -116,7 +116,7 @@ fn main() {
 exit 0",
     );
 
-    Command::new("bash")
+    let output = Command::new("bash")
         .arg("-c")
         .arg(format!(
             "sbatch --time={days}-{hours}:00:00 \
@@ -130,4 +130,6 @@ exit 0",
         ))
         .output()
         .expect("failed to submit job");
+
+    output.stdout.iter().for_each(|b| print!("{}", *b as char));
 }
