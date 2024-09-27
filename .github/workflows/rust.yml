@@ -6,6 +6,7 @@ on:
     branches: [ "main" ]
 env:
   CARGO_TERM_COLOR: always
+  GITHUB_TOKEN: ${{ secrets.TOKEN }}
 jobs:
   build:
     runs-on: ubuntu-latest
