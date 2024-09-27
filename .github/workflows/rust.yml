@@ -1,11 +1,10 @@
-name: Rust
+name: Release
+permissions:
+  contents: write
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-env:
-  CARGO_TERM_COLOR: always
+    tags:
+      - v[0-9]+.*
 jobs:
   create-release:
     runs-on: ubuntu-latest
