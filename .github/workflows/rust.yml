@@ -7,13 +7,19 @@ on:
 env:
   CARGO_TERM_COLOR: always
 jobs:
-  build:
+  create-release:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Build and release
-      uses: taiki-e/upload-rust-binary-action@v1.22.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      with:
-        bin: bp
+      - uses: actions/checkout@v4
+      - uses: taiki-e/create-gh-release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+  upload-assets:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/upload-rust-binary-action@v1
+        with:
+          bin: bp
+          token: ${{ secrets.GITHUB_TOKEN }}
