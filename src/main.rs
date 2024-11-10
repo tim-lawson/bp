@@ -61,20 +61,40 @@ fn main() {
         .prompt()
         .expect("failed to get hours");
 
+    let command = Text::new("Command:")
+        .with_default(
+            config
+                .as_ref()
+                .map(|c| c.command.clone())
+                .flatten()
+                .unwrap_or_default()
+                .as_str(),
+        )
+        .prompt()
+        .expect("failed to get command");
+
+    let name = Text::new("Name:")
+        .with_default(
+            config
+                .as_ref()
+                .map(|c| c.name.clone())
+                .flatten()
+                .unwrap_or_default()
+                .as_str(),
+        )
+        .prompt()
+        .expect("failed to get name");
+
     Config::new(
         Some(project.clone()),
         Some(queue.clone()),
         Some(gpus),
         Some(gpu_types.clone()),
         Some(hours),
+        Some(command.clone()),
+        Some(name.clone()),
     )
     .write();
-
-    let command = Text::new("Command:")
-        .prompt()
-        .expect("failed to get command");
-
-    let name = Text::new("Name:").prompt().expect("failed to get name");
 
     let job_name = name;
     let output = format!("{}.o", job_name);

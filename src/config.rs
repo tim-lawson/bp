@@ -13,6 +13,8 @@ pub struct Config {
     pub gpus: Option<u8>,
     pub gpu_types: Option<Vec<GpuType>>,
     pub hours: Option<u8>,
+    pub command: Option<String>,
+    pub name: Option<String>,
 }
 
 impl Config {
@@ -22,6 +24,8 @@ impl Config {
         gpus: Option<u8>,
         gpu_types: Option<Vec<GpuType>>,
         hours: Option<u8>,
+        command: Option<String>,
+        name: Option<String>,
     ) -> Self {
         Self {
             project,
@@ -29,6 +33,8 @@ impl Config {
             gpus,
             gpu_types,
             hours,
+            command,
+            name,
         }
     }
 
